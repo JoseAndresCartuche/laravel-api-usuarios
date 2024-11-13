@@ -15,7 +15,7 @@ class CargoController extends Controller
     public function index()
     {
         try {
-            $cargos = Cargo::all();
+            $cargos = Cargo::with(['userCreation'])->get();
             return response()->json(['data' => $cargos, 'success' => true, 'message' => 'Listado de cargos'], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al obtener los cargos'], 500);
@@ -36,7 +36,7 @@ class CargoController extends Controller
     public function show($id)
     {
         try {
-            $cargo = Cargo::findOrFail($id);
+            $cargo = Cargo::with(['userCreation'])->where('id', $id)->firstOrFail();
             return response()->json(['data' => $cargo, 'success' => true, 'message' => 'Cargo obtenido'], 200);
         } catch (ModelNotFoundException $th) {
             return response()->json(['success' => false, 'message' => 'Cargo no encontrado'], 404);

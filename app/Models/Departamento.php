@@ -17,9 +17,16 @@ class Departamento extends Model
         'activo',
     ];
 
+    protected $hidden = [
+        'idUsuarioCreacion'
+    ];
 
     public function users()
     {
         return $this->hasMany(User::class, 'idDepartamento', 'id');
+    }
+
+    public function userCreation() {
+        return $this->belongsTo(User::class, 'idUsuarioCreacion', 'id');
     }
 }

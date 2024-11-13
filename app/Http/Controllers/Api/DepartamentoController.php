@@ -15,7 +15,7 @@ class DepartamentoController extends Controller
     public function index()
     {
         try {
-            $departamentos = Departamento::all();
+            $departamentos = Departamento::with(['userCreation'])->get();
             return response()->json(['data' => $departamentos, 'success' => true, 'message' => 'Listado de departamentos'], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al obtener los departamentos'], 500);
@@ -36,7 +36,7 @@ class DepartamentoController extends Controller
     public function show($id)
     {
         try {
-            $departamento = Departamento::findOrFail($id);
+            $departamento = Departamento::with(['userCreation'])->where('id', $id)->firstOrFail();
             return response()->json(['data' => $departamento, 'success' => true, 'message' => 'Departamento obtenido'], 200);
         } catch (ModelNotFoundException $th) {
             return response()->json(['success' => false, 'message' => 'Departamento no encontrado'], 404);

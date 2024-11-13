@@ -17,8 +17,16 @@ class Cargo extends Model
         'activo',
     ];
 
+    protected $hidden = [
+        'idUsuarioCreacion'
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class, 'idCargo', 'id');
+    }
+
+    public function userCreation() {
+        return $this->belongsTo(User::class, 'idUsuarioCreacion', 'id');
     }
 }
