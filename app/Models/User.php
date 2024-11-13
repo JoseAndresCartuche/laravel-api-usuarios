@@ -36,6 +36,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
+        'idDepartamento',
+        'idCargo',
         'password',
         'remember_token',
     ];
@@ -49,4 +51,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class, 'idDepartamento', 'id');
+    }
+
+    public function cargo()
+    {
+        return $this->belongsTo(Cargo::class, 'idCargo', 'id');
+    }
 }

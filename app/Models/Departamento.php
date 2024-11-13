@@ -16,4 +16,10 @@ class Departamento extends Model
         'nombre',
         'activo',
     ];
+
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'idDepartamento', 'id');
+    }
 }

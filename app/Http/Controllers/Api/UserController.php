@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::all();
+            $users = User::with(['cargo', 'departamento'])->get();
             return response()->json(['data' => $users, 'success' => true, 'message' => 'Listado de usuarios'], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => 'Error al obtener los usuarios'], 500);
@@ -49,7 +49,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::with(['cargo', 'departamento'])->where('id', $id)->firstOrFail();
             return response()->json(['data' => $user, 'success' => true, 'message' => 'Usuario obtenido'], 200);
         } catch (ModelNotFoundException $th) {
             return response()->json(['success' => false, 'message' => 'Usuario no encontrado'], 404);
@@ -97,7 +97,7 @@ class UserController extends Controller
         try {
             $user = User::findOrFail($id);
             $user->delete();
-            return response()->json(['success' => true, 'message' => 'Usuario eliminado'], 200);
+            return response()->json(['data' => null, 'success' => true, 'message' => 'Usuario eliminado'], 200);
         } catch (ModelNotFoundException $th) {
             return response()->json(['success' => false, 'message' => 'Usuario no encontrado'], 404);
         } catch (\Throwable $th) {
