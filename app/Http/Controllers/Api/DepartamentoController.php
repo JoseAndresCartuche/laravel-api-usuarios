@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DepartamentoController extends Controller
 {
@@ -13,15 +14,12 @@ class DepartamentoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        try {
+            $departamentos = Departamento::all();
+            return response()->json(['data' => $departamentos, 'success' => true, 'message' => 'Listado de departamentos'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => 'Error al obtener los departamentos'], 500);
+        }
     }
 
     /**
@@ -35,23 +33,20 @@ class DepartamentoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Departamento $departamento)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Departamento $departamento)
-    {
-        //
+        try {
+            $departamento = Departamento::findOrFail($id);
+            return response()->json(['data' => $departamento, 'success' => true, 'message' => 'Departamento obtenido'], 200);
+        } catch (ModelNotFoundException $th) {
+            return response()->json(['success' => false, 'message' => 'Departamento no encontrado'], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Departamento $departamento)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -59,7 +54,7 @@ class DepartamentoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Departamento $departamento)
+    public function destroy($id)
     {
         //
     }

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Cargo;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CargoController extends Controller
 {
@@ -13,15 +14,12 @@ class CargoController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        try {
+            $cargos = Cargo::all();
+            return response()->json(['data' => $cargos, 'success' => true, 'message' => 'Listado de cargos'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => 'Error al obtener los cargos'], 500);
+        }
     }
 
     /**
@@ -35,23 +33,20 @@ class CargoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Cargo $cargo)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cargo $cargo)
-    {
-        //
+        try {
+            $cargo = Cargo::findOrFail($id);
+            return response()->json(['data' => $cargo, 'success' => true, 'message' => 'Cargo obtenido'], 200);
+        } catch (ModelNotFoundException $th) {
+            return response()->json(['success' => false, 'message' => 'Cargo no encontrado'], 404);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cargo $cargo)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -59,7 +54,7 @@ class CargoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Cargo $cargo)
+    public function destroy($id)
     {
         //
     }
